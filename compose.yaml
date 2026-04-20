@@ -1,0 +1,13 @@
+services:
+  nginx:
+    image: nginx:alpine
+    container_name: dev-nginx
+    ports:
+      - "80:80"
+    volumes:
+      # 将当前目录下的 default.conf 单独挂载到容器内，避免覆盖 Nginx 其他默认配置导致启动失败
+      - ./default.conf:/etc/nginx/conf.d/default.conf:ro
+    extra_hosts:
+      # 这行配置确保 host.docker.internal 在 Linux 环境下也能正常工作解析到宿主机
+      - "host.docker.internal:host-gateway"
+    restart: unless-stopped
